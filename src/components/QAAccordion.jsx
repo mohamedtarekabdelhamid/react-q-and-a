@@ -1,12 +1,13 @@
 import Accordion from 'react-bootstrap/Accordion';
 
-function QAAccordion({ data, setQuestions }) {
+function QAAccordion({ data, setQuestions, notify }) {
     const deleteQuestionHandler = () => {
         setQuestions((prev) => {
             const prevData = prev.filter((item) => item.id !== data.id);
             localStorage.setItem('QUESTIONS', JSON.stringify(prevData));
             return prevData;
         });
+        notify('تم حذف السؤال بنجاح', 'success');
     };
     return (
         <Accordion className="my-3">

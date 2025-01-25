@@ -6,6 +6,9 @@ import Col from 'react-bootstrap/Col';
 import FormInput from './components/FormInput';
 import QAAccordion from './components/QAAccordion';
 
+import { ToastContainer, toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+
 function App() {
     const [questions, setQuestions] = useState([]);
     useEffect(() => {
@@ -15,11 +18,34 @@ function App() {
         }
     }, []);
 
-    const deleteQuestionsHandler = (e) => {
-        e.preventDefault();
-        localStorage.removeItem('QUESTIONS');
-        setQuestions([]);
+    const notify = (message, status) => {
+        toast[status](message);
     };
+
+    const deleteQuestionsHandler = () => {
+        Swal.fire({
+            title: 'هل انت متاكد من حذف كل الاسئلة؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#224f61',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'لا',
+            customClass: {
+                title: 'font',
+                content: 'font',
+                confirmButton: 'font',
+                cancelButton: 'font',
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('QUESTIONS');
+                setQuestions([]);
+                notify('تم حذف كل الاسئلة بنجاح', 'success');
+            }
+        });
+    };
+
     return (
         <>
             <div className="font color-body">
@@ -32,7 +58,10 @@ function App() {
                             <h3>قائمة الأسئلة السابقة</h3>
                         </Col>
                         <Col md={9} className="mt-5 text-center">
-                            <FormInput setQuestions={setQuestions} />
+                            <FormInput
+                                setQuestions={setQuestions}
+                                notify={notify}
+                            />
                             {!questions.length ? (
                                 <h6 className="mt-5">لا يوجد اسئلة حاليا</h6>
                             ) : (
@@ -41,6 +70,7 @@ function App() {
                                         key={index}
                                         data={question}
                                         setQuestions={setQuestions}
+                                        notify={notify}
                                     />
                                 ))
                             )}
@@ -58,6 +88,7 @@ function App() {
                         </Col>
                     </Row>
                 </Container>
+                <ToastContainer />
             </div>
         </>
     );

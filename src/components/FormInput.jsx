@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-function FormInput({ setQuestions }) {
+function FormInput({ setQuestions, notify }) {
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
 
@@ -17,8 +17,13 @@ function FormInput({ setQuestions }) {
     const submitHandler = (e) => {
         e.preventDefault();
         const id = new Date().getTime();
+        if (!question || !answer) {
+            notify('يجب ادخال السؤال والاجابة', 'error');
+            return;
+        }
         setQuestion('');
         setAnswer('');
+
         setQuestions((prev) => {
             const newQuestion = {
                 id,
@@ -31,6 +36,7 @@ function FormInput({ setQuestions }) {
             );
             return [...prev, newQuestion];
         });
+        notify('تم اضافة السؤال بنجاح', 'success');
     };
     return (
         <Form onSubmit={submitHandler}>
@@ -42,7 +48,6 @@ function FormInput({ setQuestions }) {
                         className="py-2 "
                         onChange={changeQuestionHandler}
                         value={question}
-                        required
                     />
                 </Col>
 
@@ -53,7 +58,6 @@ function FormInput({ setQuestions }) {
                         className="py-2"
                         onChange={changeAnswerHandler}
                         value={answer}
-                        required
                     />
                 </Col>
 
