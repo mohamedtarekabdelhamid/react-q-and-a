@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -8,9 +8,16 @@ import QAAccordion from './components/QAAccordion';
 
 function App() {
     const [questions, setQuestions] = useState([]);
+    useEffect(() => {
+        const questions = JSON.parse(localStorage.getItem('QUESTIONS'));
+        if (questions) {
+            setQuestions(questions);
+        }
+    }, []);
 
     const deleteQuestionsHandler = (e) => {
         e.preventDefault();
+        localStorage.removeItem('QUESTIONS');
         setQuestions([]);
     };
     return (

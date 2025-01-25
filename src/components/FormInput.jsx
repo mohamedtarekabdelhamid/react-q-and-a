@@ -25,9 +25,12 @@ function FormInput({ setQuestions }) {
                 question,
                 answer,
             };
+            localStorage.setItem(
+                'QUESTIONS',
+                JSON.stringify([...prev, newQuestion])
+            );
             return [...prev, newQuestion];
         });
-        data.push({ id, question, answer });
     };
     return (
         <Form onSubmit={submitHandler}>

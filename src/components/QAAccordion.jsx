@@ -4,7 +4,7 @@ function QAAccordion({ data, setQuestions }) {
     const deleteQuestionHandler = () => {
         setQuestions((prev) => {
             const prevData = prev.filter((item) => item.id !== data.id);
-
+            localStorage.setItem('QUESTIONS', JSON.stringify(prevData));
             return prevData;
         });
     };
